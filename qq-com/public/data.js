@@ -1,5 +1,1 @@
-{
-  {
-    Data;
-  }
-}
+window.inform({{Data}})

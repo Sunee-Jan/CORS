@@ -41,9 +41,17 @@ var server = http.createServer(function (request, response) {
     response.end();
   } else if (path === "/data.json") {
     response.statusCode = 200;
-    response.setHeader("Content-Type", "text/javascript;charset=utf-8");
-    response.setHeader("Access-Control-Allow-Origin", "http://maroku.com:8080");
+    response.setHeader("Content-Type", "text/json;charset=utf-8");
+    response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080"); //设置允许该地址【http://maroku.com:8080】的访问。
     response.write(fs.readFileSync("public/data.json"));
+    response.end();
+  } else if (path === "/data.js") {
+    response.statusCode = 200;
+    response.setHeader("Content-Type", "text/javascript;charset=utf-8");
+    const string = fs.readFileSync("public/data.js").toString();
+    const data = fs.readFileSync("public/data.json").toString();
+    const string1 = string.replace("{{Data}}", data);
+    response.write(string1);
     response.end();
   } else {
     response.statusCode = 404;
