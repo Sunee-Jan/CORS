@@ -1,1 +1,1 @@
-window.inform({{Data}})
+window['{{xxx}}']({{Data}})

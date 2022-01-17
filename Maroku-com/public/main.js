@@ -22,10 +22,12 @@ request.send();
 //引用成功后，即可调用该数据函数
 //调用函数获取数据成功后，即可删除该script标签，避免标签后续引入过多
 
-window.inform = function (data) {
+let random = Math.random();
+
+window[random] = function (data) {
   console.log(data);
 };
 const script = document.createElement("script");
-script.src = "http://qq.com:8888/data.js";
+script.src = `http://qq.com:8888/data.js?functionName=${random}`;
 document.body.appendChild(script);
 document.body.removeChild(script);

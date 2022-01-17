@@ -42,17 +42,27 @@ var server = http.createServer(function (request, response) {
   } else if (path === "/data.json") {
     response.statusCode = 200;
     response.setHeader("Content-Type", "text/json;charset=utf-8");
-    response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080"); //设置允许该地址【http://maroku.com:8080】的访问。
+    response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080"); //设置仅允许该地址【http://maroku.com:8080】的访问。
     response.write(fs.readFileSync("public/data.json"));
     response.end();
   } else if (path === "/data.js") {
-    response.statusCode = 200;
-    response.setHeader("Content-Type", "text/javascript;charset=utf-8");
-    const string = fs.readFileSync("public/data.js").toString();
-    const data = fs.readFileSync("public/data.json").toString();
-    const string1 = string.replace("{{Data}}", data);
-    response.write(string1);
-    response.end();
+    if (request.headers["referer"].indexOf("http://localhost:8080") === 0) {
+      //设置仅允许该地址【http://maroku.com:8080】的访问。
+      response.statusCode = 200;
+      response.setHeader("Content-Type", "text/javascript;charset=utf-8");
+      const string = fs.readFileSync("public/data.js").toString();
+      const data = fs.readFileSync("public/data.json").toString();
+      const string1 = string
+        .replace("{{Data}}", data)
+        .replace("{{xxx}}", query.functionName); //将函数名替换为请求穿来的随机数
+      response.write(string1);
+      response.end();
+    } else {
+      response.statusCode = 404;
+      response.setHeader("Content-Type", "text/html;charset=utf-8");
+      response.write(`你想干哈？`);
+      response.end();
+    }
   } else {
     response.statusCode = 404;
     response.setHeader("Content-Type", "text/html;charset=utf-8");
