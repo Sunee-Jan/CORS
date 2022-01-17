@@ -42,6 +42,7 @@ var server = http.createServer(function (request, response) {
   } else if (path === "/data.json") {
     response.statusCode = 200;
     response.setHeader("Content-Type", "text/javascript;charset=utf-8");
+    response.setHeader("Access-Control-Allow-Origin", "http://maroku.com:8080");
     response.write(fs.readFileSync("public/data.json"));
     response.end();
   } else {
